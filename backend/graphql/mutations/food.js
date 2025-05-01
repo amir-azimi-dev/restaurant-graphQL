@@ -1,0 +1,30 @@
+const {FoodType} = require("../types/food");
+const {GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID} = require("graphql/type");
+const FoodModel = require("../../models/food");
+
+const foodMutation = {
+    type: FoodType,
+    args: {
+        title: {type: new GraphQLNonNull(GraphQLString)},
+        price: {type: new GraphQLNonNull(GraphQLInt)},
+        inventory: {type: new GraphQLNonNull(GraphQLInt)},
+        image: {type: new GraphQLNonNull(GraphQLString)},
+        category: {type: new GraphQLNonNull(GraphQLID)},
+    },
+    resolve: async (_, args) => {
+        const newFoodData = {
+            title: args.title,
+            price: args.price,
+            inventory: args.inventory,
+            image: args.image,
+            category: args.category
+        };
+
+        const {_id} = await FoodModel.create(newFoodData);
+        return await FoodModel.findById(_id).populate("category");
+    }
+};
+
+module.exports = {
+    foodMutation
+};
