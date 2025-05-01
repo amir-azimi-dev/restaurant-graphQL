@@ -2,7 +2,7 @@ const {FoodType} = require("../types/food");
 const {GraphQLList} = require("graphql/type");
 const FoodModel = require("../../models/food");
 
-const foodQuery = {
+const foodsQuery = {
     type: new GraphQLList(FoodType),
     resolve: async () => {
         return await FoodModel.find();
@@ -10,5 +10,5 @@ const foodQuery = {
 };
 
 module.exports = {
-    foodQuery
+    foodsQuery
 };
