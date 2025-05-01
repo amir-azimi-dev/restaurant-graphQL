@@ -5,7 +5,7 @@ const FoodModel = require("../../models/food");
 const foodQuery = {
     type: new GraphQLList(FoodType),
     resolve: async () => {
-        return await FoodModel.find().populate("category");
+        return await FoodModel.find();
     }
 };
 

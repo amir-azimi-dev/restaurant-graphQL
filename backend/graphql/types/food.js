@@ -1,17 +1,27 @@
-const { GraphQLObjectType, GraphQLString } = require("graphql");
+const {GraphQLObjectType, GraphQLString} = require("graphql");
 const {GraphQLID, GraphQLInt} = require("graphql/type");
-const {CategoryType} = require("./category");
+const CategoryModel = require("../../models/category");
 
 const FoodType = new GraphQLObjectType({
     name: "Food",
-    fields: () => ({
-        _id: { type: GraphQLID },
-        title: { type: GraphQLString },
-        price: { type: GraphQLInt },
-        inventory: { type: GraphQLInt },
-        image: { type: GraphQLString },
-        category: { type: CategoryType }
-    })
+    fields: () => {
+        const {CategoryType} = require("./category");
+
+        return {
+            _id: {type: GraphQLID},
+            title: {type: GraphQLString},
+            price: {type: GraphQLInt},
+            inventory: {type: GraphQLInt},
+            image: {type: GraphQLString},
+            category: {
+                type: CategoryType,
+                resolve: async (source) => {
+                    const categoryId = source.category;
+                    return await CategoryModel.findById(categoryId);
+                }
+            }
+        }
+    }
 });
 
 module.exports = {
