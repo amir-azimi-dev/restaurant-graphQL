@@ -1,10 +1,11 @@
 const express = require("express");
 const connectToDB = require("./utils/connectToDB/connectToDB");
-const { createHandler } = require("graphql-http/lib/use/express");
-const { GraphQLSchema } = require("./graphql/schema");
+const {createHandler} = require("graphql-http/lib/use/express");
+const GraphQLSchema = require("./graphql/schema");
 
 const app = express();
-app.use("/graph", createHandler({
+
+app.use("/graphql", createHandler({
     schema: GraphQLSchema,
     context: req => ({req})
 }));
