@@ -1,17 +1,22 @@
-const {FoodType} = require("../types/food");
-const {GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID} = require("graphql/type");
+const { FoodType } = require("../types/food");
+const { GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID } = require("graphql/type");
 const FoodModel = require("../../models/food");
 
 const foodMutation = {
     type: FoodType,
     args: {
-        title: {type: new GraphQLNonNull(GraphQLString)},
-        price: {type: new GraphQLNonNull(GraphQLInt)},
-        inventory: {type: new GraphQLNonNull(GraphQLInt)},
-        image: {type: new GraphQLNonNull(GraphQLString)},
-        category: {type: new GraphQLNonNull(GraphQLID)},
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        price: { type: new GraphQLNonNull(GraphQLInt) },
+        inventory: { type: new GraphQLNonNull(GraphQLInt) },
+        image: { type: new GraphQLNonNull(GraphQLString) },
+        category: { type: new GraphQLNonNull(GraphQLID) },
     },
     resolve: async (_, args) => {
+        const user = await authorizeUser(context.req);
+        if (!user || user.role !== "ADMIN") {
+            throw new Error("Access Denied!");
+        }
+
         const newFoodData = {
             title: args.title,
             price: args.price,
@@ -20,7 +25,7 @@ const foodMutation = {
             category: args.category
         };
 
-        const {_id} = await FoodModel.create(newFoodData);
+        const { _id } = await FoodModel.create(newFoodData);
         return await FoodModel.findById(_id).populate("category");
     }
 };
