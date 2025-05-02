@@ -3,6 +3,7 @@ const { GraphQLNonNull, GraphQLString } = require("graphql/type");
 const UserModel = require("../../models/user");
 const { hash, compare } = require("../../utils/hash/hash");
 const { generateToken } = require("../../utils/jwt/jwt");
+const { validateRegisterUserData, validateLoginUserData } = require("../../utils/validators/user");
 
 const registerUserMutation = {
     type: AuthType,
@@ -12,6 +13,9 @@ const registerUserMutation = {
         password: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args) => {
+        const isDataValid = await validateRegisterUserData(args);
+        if (!isDataValid) throw new Error("Invalid Data!");
+
         const isFirstUser = !Boolean(await UserModel.countDocuments());
 
         const newUserData = {
@@ -38,6 +42,9 @@ const loginUserMutation = {
         password: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args) => {
+        const isDataValid = await validateLoginUserData(args);
+        if (!isDataValid) throw new Error("Invalid Data!");
+
         const targetUserData = await UserModel.findOne({ email: args.email }).lean();
         if (!targetUserData) return null;
 

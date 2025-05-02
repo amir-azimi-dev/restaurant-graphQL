@@ -1,6 +1,8 @@
 const { FoodType } = require("../types/food");
 const { GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID } = require("graphql/type");
 const FoodModel = require("../../models/food");
+const { validateCreateFoodData } = require("../../utils/validators/food");
+const { authorizeUser } = require("../../utils/authorizeUser/authorizeUser");
 
 const foodMutation = {
     type: FoodType,
@@ -11,7 +13,10 @@ const foodMutation = {
         image: { type: new GraphQLNonNull(GraphQLString) },
         category: { type: new GraphQLNonNull(GraphQLID) },
     },
-    resolve: async (_, args) => {
+    resolve: async (_, args, context) => {
+        const isDataValid = await validateCreateFoodData(args);
+        if (!isDataValid) throw new Error("Invalid Data!");
+
         const user = await authorizeUser(context.req);
         if (!user || user.role !== "ADMIN") {
             throw new Error("Access Denied!");
