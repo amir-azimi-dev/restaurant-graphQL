@@ -4,6 +4,7 @@ const {categoriesQuery} = require("./queries/category");
 const {categoryMutation} = require("./mutations/category");
 const {foodsQuery} = require("./queries/food");
 const {foodMutation} = require("./mutations/food");
+const { registerUserMutation, loginUserMutation } = require("./mutations/user");
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
@@ -17,6 +18,8 @@ const RootQuery = new GraphQLObjectType({
 const RootMutation = new GraphQLObjectType({
     name: "RootMutation",
     fields: () => ({
+        registerUser: registerUserMutation,
+        loginUser: loginUserMutation,
         createCategory: categoryMutation,
         createFood: foodMutation
     })

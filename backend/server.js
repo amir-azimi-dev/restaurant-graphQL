@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const connectToDB = require("./utils/connectToDB/connectToDB");
 const {createHandler} = require("graphql-http/lib/use/express");
