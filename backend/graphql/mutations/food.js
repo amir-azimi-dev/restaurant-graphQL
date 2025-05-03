@@ -30,8 +30,7 @@ const foodMutation = {
             category: args.category
         };
 
-        const { _id } = await FoodModel.create(newFoodData);
-        return await FoodModel.findById(_id).populate("category");
+        return FoodModel.create(newFoodData);
     }
 };
 
