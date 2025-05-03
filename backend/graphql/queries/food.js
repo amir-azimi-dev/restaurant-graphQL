@@ -20,7 +20,7 @@ const getSingleFood = {
 
         return await FoodModel.findById(args.foodId);
     }
-}
+};
 
 module.exports = {
     foodsQuery,

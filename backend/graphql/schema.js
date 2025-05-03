@@ -6,7 +6,7 @@ const {foodsQuery, getSingleFood} = require("./queries/food");
 const {foodMutation} = require("./mutations/food");
 const { registerUserMutation, loginUserMutation } = require("./mutations/user");
 const {orderMutation, changeOrderStatusMutation, removeOrderMutation} = require("./mutations/order");
-const {ordersQuery} = require("./queries/order");
+const {ordersQuery, getSingleOrder} = require("./queries/order");
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
@@ -15,7 +15,8 @@ const RootQuery = new GraphQLObjectType({
         categories: categoriesQuery,
         foods: foodsQuery,
         singleFood: getSingleFood,
-        orders: ordersQuery
+        orders: ordersQuery,
+        singleOrder: getSingleOrder
     })
 });
 
