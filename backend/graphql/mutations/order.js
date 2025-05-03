@@ -1,8 +1,17 @@
 const {OrderType} = require("../types/order");
-const {GraphQLNonNull, GraphQLString, GraphQLID, GraphQLList, GraphQLInputObjectType, GraphQLInt} = require("graphql/type");
+const {
+    GraphQLNonNull,
+    GraphQLString,
+    GraphQLID,
+    GraphQLList,
+    GraphQLInputObjectType,
+    GraphQLInt,
+    GraphQLBoolean
+} = require("graphql/type");
 const OrderModel = require("../../models/order");
-const {validateCreateOrderData} = require("../../utils/validators/order");
+const {validateCreateOrderData, validateChangeOrderStatusData} = require("../../utils/validators/order");
 const {authorizeUser} = require("../../utils/authorizeUser/authorizeUser");
+const {isValidObjectId} = require("mongoose");
 
 const InputOrderPayloadType = new GraphQLInputObjectType({
     name: "InputOrderPayloadType",
@@ -37,6 +46,45 @@ const orderMutation = {
     }
 };
 
+const changeOrderStatusMutation = {
+    type: OrderType,
+    args: {
+        orderId: {type: new GraphQLNonNull(GraphQLID)},
+        isDelivered: {type: new GraphQLNonNull(GraphQLBoolean)}
+    },
+    resolve: async (_, args, context) => {
+        const isDataValid = await validateChangeOrderStatusData(args);
+        if (!isDataValid) throw new Error("Invalid Data!");
+
+        const user = await authorizeUser(context.req);
+        if (!user || user.role !== "ADMIN") {
+            throw new Error("Access denied!");
+        }
+
+        return OrderModel.findByIdAndUpdate(args.orderId, {isDelivered: args.isDelivered}, {new: true});
+    }
+};
+
+const removeOrderMutation = {
+    type: OrderType,
+    args: {
+        orderId: {type: new GraphQLNonNull(GraphQLID)}
+    },
+    resolve: async (_, args, context) => {
+        if (!isValidObjectId(args.orderId)) throw new Error("Invalid Order Id!");
+
+        const user = await authorizeUser(context.req);
+        if (!user || user.role !== "ADMIN") {
+            throw new Error("Access denied!");
+        }
+
+        return OrderModel.findByIdAndDelete(args.orderId);
+    }
+};
+
+
 module.exports = {
-    orderMutation
+    orderMutation,
+    changeOrderStatusMutation,
+    removeOrderMutation
 };

@@ -1,5 +1,5 @@
 const {isValidObjectId} = require("mongoose");
-const {object, string, number, array} = require("yup");
+const {object, string, number, array, boolean} = require("yup");
 
 const orderSchema = object({
     title: string().min(3).max(100).required(),
@@ -9,6 +9,11 @@ const orderSchema = object({
             count: number().min(0).required()
         }
     )),
+});
+
+const changeOrderStatusSchema = object({
+    orderId: string().required(),
+    isDelivered: boolean().required()
 });
 
 const validateCreateOrderData = async data => {
@@ -23,4 +28,15 @@ const validateCreateOrderData = async data => {
     }
 };
 
-module.exports = {validateCreateOrderData};
+const validateChangeOrderStatusData = async data => {
+    try {
+        if (!isValidObjectId(data.orderId)) throw new Error("Order Id is invalid!");
+        return await changeOrderStatusSchema.validate(data);
+
+    } catch (error) {
+        console.log(error)
+        return false;
+    }
+};
+
+module.exports = {validateCreateOrderData, validateChangeOrderStatusData};
