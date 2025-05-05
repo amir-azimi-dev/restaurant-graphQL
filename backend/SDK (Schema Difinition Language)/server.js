@@ -4,17 +4,16 @@ const express = require("express");
 const connectToDB = require("./utils/connectToDB/connectToDB");
 const {createHandler} = require("graphql-http/lib/use/express");
 const GraphQLSchema = require("./graphql/schema");
-const CategoryModel = require("./models/category");
+const rootResolvers = require("./graphql/resolvers");
 
 const app = express();
+
+console.log(rootResolvers);
 
 app.use("/graphql", createHandler({
     schema: GraphQLSchema,
     context: req => ({req}),
-    rootValue: {
-        categories: async () => CategoryModel.find(),
-        singleCategory: async (args) => await CategoryModel.findById(args.categoryId)
-    }
+    rootValue: rootResolvers
 }));
 
 const startServer = async () => {

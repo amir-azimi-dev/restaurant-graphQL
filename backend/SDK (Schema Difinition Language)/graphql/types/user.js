@@ -31,8 +31,6 @@ const UserType = `
 `;
 
 const AuthType = `
-    ${UserType}
-
     type Auth {
         user: User!,
         token: String!

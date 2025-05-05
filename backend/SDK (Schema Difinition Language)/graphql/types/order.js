@@ -60,7 +60,15 @@ const OrderType = `
     }
 `;
 
+const InputOrderPayloadType = `
+    input InputOrderPayload {
+        food: Food!,
+        count: Int!
+    }
+`;
+
 module.exports = {
     OrderType,
-    OrderPayloadType
+    OrderPayloadType,
+    InputOrderPayloadType
 }
