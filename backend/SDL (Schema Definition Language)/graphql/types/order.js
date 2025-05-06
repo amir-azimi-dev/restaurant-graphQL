@@ -54,7 +54,7 @@ const OrderType = `
     type Order {
         _id: ID!,
         payload: [OrderPayload!]!,
-        user: Int!,
+        user: User!,
         isDelivered: Int!,
         image: String!
     }
@@ -62,7 +62,7 @@ const OrderType = `
 
 const InputOrderPayloadType = `
     input InputOrderPayload {
-        food: Food!,
+        food: ID!,
         count: Int!
     }
 `;

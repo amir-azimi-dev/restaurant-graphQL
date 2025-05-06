@@ -16,7 +16,7 @@ const Schema = buildSchema(`
         users: [User!]!,
         categories: [Category!]!,
         foods: [Food!]!,
-        singleFoods(foodId: ID!): Food,
+        singleFood(foodId: ID!): Food,
         orders: [Order!]!,
         singleOrder(orderId: ID!): Order
     }
@@ -25,10 +25,10 @@ const Schema = buildSchema(`
         registerUser(username: String!, email: String!, password: String!): Auth,
         loginUser(email: String!, password: String!):  Auth,
         createCategory(title: String!, icon: String!): Category,
-        createFood(title: String!, price: Int!, inventory: Int!, image: String!, category: ID!): Food,
+        createFood(title: String!, price: Int!, inventory: Int!, image: String!, category: ID!): Food!,
         createOrder(title: String!, payload: [InputOrderPayload!]!): Order,
         changeOrderStatus(orderId: ID!, isDelivered: Boolean!): Order, 
-        removeOrder(OrderId: ID!): Order
+        removeOrder(orderId: ID!): Order
     }
     
     schema {

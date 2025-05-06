@@ -1,7 +1,7 @@
 const UserModel = require("../../models/user");
 const { verifyToken } = require("../jwt/jwt");
 
-const authorizeUser = async req => {
+const authorizeUser = async ({req}) => {
     try {
         const authHeader = req.headers.authorization;
         const token = authHeader.replace("Bearer ", "");

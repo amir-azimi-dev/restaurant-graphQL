@@ -8,8 +8,6 @@ const rootResolvers = require("./graphql/resolvers");
 
 const app = express();
 
-console.log(rootResolvers);
-
 app.use("/graphql", createHandler({
     schema: GraphQLSchema,
     context: req => ({req}),

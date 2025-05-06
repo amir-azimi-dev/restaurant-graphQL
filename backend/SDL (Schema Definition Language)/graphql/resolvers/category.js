@@ -1,8 +1,25 @@
 const CategoryModel = require("../../models/category");
+const FoodModel = require("../../models/food");
 const {validateCreateCategoryData} = require("../../utils/validators/category");
 const {authorizeUser} = require("../../utils/authorizeUser/authorizeUser");
 
-const categories = async () => await CategoryModel.find();
+const categories = async () => {
+    const categoriesData = await CategoryModel.find().lean();
+
+    return await Promise.all(
+        categoriesData.map(async categoryData => {
+            const categoryFoods = await FoodModel.find({category: categoryData._id})
+                .populate("category")
+                .populate("category.food")
+                .lean();
+
+            return {
+                ...categoryData,
+                foods: categoryFoods
+            };
+        })
+    );
+};
 
 const createCategory = async (args, req) => {
     const isDataValid = await validateCreateCategoryData(args);
