@@ -1,7 +1,3 @@
-const {GraphQLObjectType, GraphQLString} = require("graphql");
-const {GraphQLID, GraphQLInt} = require("graphql/type");
-const CategoryModel = require("../../models/category");
-
 const FoodType = `#graphql
     type Food {
         _id: ID!,
