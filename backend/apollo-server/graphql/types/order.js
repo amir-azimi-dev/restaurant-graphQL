@@ -1,11 +1,11 @@
-const OrderPayloadType = `
+const OrderPayloadType = `#graphql
     type OrderPayload {
         food: Food!,
         count: Int!
     }
 `;
 
-const OrderType = `
+const OrderType = `#graphql
     ${OrderPayloadType}
 
     type Order {
@@ -17,7 +17,7 @@ const OrderType = `
     }
 `;
 
-const InputOrderPayloadType = `
+const InputOrderPayloadType = `#graphql
     input InputOrderPayload {
         food: ID!,
         count: Int!
