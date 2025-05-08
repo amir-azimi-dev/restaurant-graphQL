@@ -3,37 +3,11 @@ const {authorizeUser} = require("../../utils/authorizeUser/authorizeUser");
 const FoodModel = require("../../models/food");
 const {isValidObjectId} = require("mongoose");
 
-const foods = async () => {
-    const foodsData = await FoodModel.find().populate("category").lean();
-
-    return await Promise.all(
-        foodsData.map(async foodData => {
-            const categoryFoods = await FoodModel.find({category: foodData.category._id})
-                .populate("category")
-                .populate("category.food")
-                .lean();
-
-            const manipulatedFoodData = {...foodData};
-            manipulatedFoodData.category.foods = categoryFoods;
-
-            return manipulatedFoodData;
-        })
-    );
-};
+const foods = async () => await FoodModel.find().populate("category").lean();
 
 const singleFood = async (_, args) => {
     if (!isValidObjectId(args.foodId)) throw new Error("Invalid Food Id!");
-    const foodData = await FoodModel.findById(args.foodId).populate("category").lean();
-
-    const categoryFoods = await FoodModel.find({category: foodData.category._id})
-        .populate("category")
-        .populate("category.food")
-        .lean();
-
-    const manipulatedFoodData = {...foodData};
-    manipulatedFoodData.category.foods = categoryFoods;
-
-    return manipulatedFoodData;
+    return FoodModel.findById(args.foodId).populate("category").lean();
 }
 
 const createFood = async (_, args, req) => {
@@ -53,7 +27,7 @@ const createFood = async (_, args, req) => {
         category: args.category
     };
 
-    return await ((await FoodModel.create(newFoodData)).populate("category"));
+    return FoodModel.create(newFoodData);
 };
 
 module.exports = {

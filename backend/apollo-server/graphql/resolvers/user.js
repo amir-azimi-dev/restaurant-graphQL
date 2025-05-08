@@ -29,7 +29,6 @@ const registerUser = async (_, args) => {
 
 const loginUser = async (_, args) => {
     const isDataValid = await validateLoginUserData(args);
-    console.log(args)
     if (!isDataValid) throw new Error("Invalid Data!");
 
     const targetUserData = await UserModel.findOne({email: args.email}).lean();
