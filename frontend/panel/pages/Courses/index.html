@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<!--=== Coding by CodingLab | www.codinglabweb.com === -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="../../style.css" />
+
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
+
+    <title>Admin Dashboard Panel</title>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <nav>
+        <div class="logo-name">
+            <div class="logo-image">
+                <img src="images/logo.png" alt="" />
+            </div>
+
+            <span class="logo_name">CodingLab</span>
+        </div>
+
+        <div class="menu-items">
+            <ul class="nav-links">
+                <li>
+                    <a href="../../index.html">
+                        <i class="uil uil-estate"></i>
+                        <span class="link-name">Dahsboard</span>
+                    </a>
+                </li>
+                <li class="active-tab">
+                    <a href="./pages/Courses/index.html">
+                        <i class="uil uil-files-landscapes"></i>
+                        <span class="link-name">Courses</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="uil uil-chart"></i>
+                        <span class="link-name">Analytics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="uil uil-thumbs-up"></i>
+                        <span class="link-name">Like</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="uil uil-comments"></i>
+                        <span class="link-name">Comment</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="uil uil-share"></i>
+                        <span class="link-name">Share</span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="logout-mode">
+                <li>
+                    <a href="#">
+                        <i class="uil uil-signout"></i>
+                        <span class="link-name">Logout</span>
+                    </a>
+                </li>
+
+                <li class="mode">
+                    <a href="#">
+                        <i class="uil uil-moon"></i>
+                        <span class="link-name">Dark Mode</span>
+                    </a>
+
+                    <div class="mode-toggle">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="dashboard">
+        <div class="top">
+            <i class="uil uil-bars sidebar-toggle"></i>
+
+            <div class="search-box">
+                <i class="uil uil-search"></i>
+                <input type="text" placeholder="Search here..." />
+            </div>
+
+            <img src="images/profile.jpg" alt="" />
+        </div>
+
+        <div class="dash-content">
+            <!-- Title -->
+            <div class="overview">
+                <div class="title">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <span class="text">Dashboard | courses</span>
+                </div>
+            </div>
+            <section class="container">
+
+                <div class="product-base-data">
+                    <p class="data-title">
+                        Title & Description
+                    </p>
+                    <div class="data-card">
+                        <div class="data-field">
+                            <label for="productName" class="input-label">Product name</label>
+                            <input type="text" id="productName" class="input-element"
+                                placeholder="example: Node js (Beginning to prefessional)">
+                        </div>
+                        <div class="data-field">
+                            <div class="justify-between">
+                                <label for="product-description" class="input-label">Product description</label>
+                                <span class="link">
+                                    Or upload a .txt file
+                                </span>
+                            </div>
+                            <textarea type="text" id="product-description"
+                                placeholder="Add a description to your product.."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image upload -->
+                <div class="product-base-data">
+                    <p class="data-title">
+                        Product images
+                    </p>
+                    <div class="data-card row">
+                        <div class="data-card_box file-upload-card">
+                            <input type="file" accept="image/*" class="file-input">
+                            <div class="drag-drop-text">
+                                <img src="/panel/Images/upload.png" class="upload-icon" alt="">
+                                <p class="link z-0">
+                                    Click to upload
+                                </p>
+                                <p class="z-0">
+                                    or drag and drop
+                                </p>
+                            </div>
+                        </div>
+                        <div class="data-card_box relative">
+                            <img src="/panel/Images/courses/course1.webp" alt="cover image" class="course-cover">
+                            <div class="blur-screen"></div>
+                            <div class="buttons">
+
+                                <button class="button">
+                                    Replace
+                                </button>
+                                <button class="button">
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                        <div class="data-card_box images-grid">
+                            <div class="minimal-item">
+                                <img src="/panel/Images/courses/course2.webp" alt="" class="course-cover">
+                            </div>
+                            <div class="minimal-item">
+                                <img src="/panel/Images/courses/course3.webp" alt="" class="course-cover">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-base-data">
+                    <p class="data-title">
+                        Category
+                    </p>
+                    <div class="data-card">
+                        <div class="data-field">
+                            <label for="categoryName" class="input-label">Category name</label>
+                            <input type="text" id="categoryName" class="input-element" placeholder="example: front-end">
+                        </div>
+                        <div class="data-field">
+                            <div class="justify-between">
+                                <label for="product-keywords" class="input-label">Keywords</label>
+                                <span class="link">
+                                    Or upload a .txt file
+                                </span>
+                            </div>
+                            <textarea type="text" id="product-keywords"
+                                placeholder="example: React, Javascript, TailwindCss, etc.."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-base-data">
+                    <p class="data-title">
+                        Settings
+                    </p>
+                    <div class="data-card">
+                        <div class="data-field">
+                            <label for="product-shortName" class="input-label">Product short-name</label>
+                            <input type="text" id="product-shortName" class="input-element"
+                                placeholder="example: javascript-expert">
+                        </div>
+                        <div class="data-field">
+                            <label for="product-price" class="input-label">Product price</label>
+                            <input type="text" id="product-price" class="input-element"
+                            placeholder="899,999T"
+                            > </div>
+                        </div>
+                    </div>
+                    <div class="section-footer">
+                        <button class="button cancel">
+                            Cancel
+                        </button>
+                        <button class="button apply">
+                            Apply changes
+                        </button>
+                    </div>
+            </section>
+
+        </div>
+        </div>
+    </section>
+
+    <script src="/panel/script.js"></script>
+</body>
+
+</html>
