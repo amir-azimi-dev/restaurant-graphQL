@@ -28,8 +28,6 @@ const authorizeUser = async () => {
     if (errors || !data.getMe || data.getMe.role !== "ADMIN") {
         return location.href = "/";
     }
-
-    // console.log(data)
 };
 
 window.addEventListener("load", authorizeUser);
