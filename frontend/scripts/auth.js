@@ -57,10 +57,15 @@ const loginAction = async (event) => {
     })
   });
 
-  const { data } = await res.json();
+  const { data, errors } = await res.json();
+  if (errors) {
+    return swal("error", errors[0].message, "error");
+  }
+
   const token = data.loginUser.token;
   localStorage.setItem("access-token", token);
-  token && toggle();
+  swal("You logged in successfully.", "", "success");
+  toggle();
 };
 
 const registerAction = async (event) => {
@@ -88,12 +93,15 @@ const registerAction = async (event) => {
     })
   });
 
-  const { data } = await res.json();
-  console.log(data)
+  const { data, errors } = await res.json();
+  if (errors) {
+    return swal("error", errors[0].message, "error");
+  }
+
   const token = data.registerUser.token;
   localStorage.setItem("access-token", token);
-
-  token && toggle();
+  swal("You are registered successfully.", "", "success");
+  toggle();
 };
 
 clickController({
