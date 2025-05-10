@@ -12,6 +12,7 @@ const TypedDefs = `#graphql
     ${AuthType}
 
     type Query {
+        getMe: User,
         users: [User!]!,
         categories: [Category!]!,
         foods: [Food!]!,

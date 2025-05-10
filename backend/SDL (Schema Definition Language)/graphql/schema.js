@@ -13,6 +13,7 @@ const Schema = buildSchema(`
     ${AuthType}
 
     type RootQuery {
+        getMe: User,
         users: [User!]!,
         categories: [Category!]!,
         foods: [Food!]!,

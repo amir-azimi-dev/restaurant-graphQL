@@ -26,7 +26,7 @@ const registerUserMutation = {
         };
 
         const userData = await UserModel.create(newUserData);
-        const userToken = `Bearer ${generateToken({ id: userData._id })}`;
+        const userToken = generateToken({ id: userData._id });
 
         return {
             token: userToken,
@@ -51,7 +51,7 @@ const loginUserMutation = {
         const isPasswordCorrect = compare(args.password, targetUserData.password);
         if (!isPasswordCorrect) return null;
 
-        const userToken = `Bearer ${generateToken({ id: targetUserData._id })}`;
+        const userToken = generateToken({ id: targetUserData._id });
 
         return {
             token: userToken,

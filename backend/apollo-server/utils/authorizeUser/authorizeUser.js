@@ -8,7 +8,7 @@ const authorizeUser = async (req) => {
         
         const payload = verifyToken(token);
         if (!payload) throw new Error("Invalid Token!");
-        const targetUser = await UserModel.findById(payload.id);
+        const targetUser = await UserModel.findById(payload.id).lean();
         return targetUser;
 
     } catch (error) {

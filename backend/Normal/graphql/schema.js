@@ -1,5 +1,5 @@
 const {GraphQLObjectType, GraphQLSchema} = require("graphql");
-const {usersQuery} = require("./queries/user");
+const {usersQuery, getMeQuery} = require("./queries/user");
 const {categoriesQuery} = require("./queries/category");
 const {categoryMutation} = require("./mutations/category");
 const {foodsQuery, getSingleFood} = require("./queries/food");
@@ -11,6 +11,7 @@ const {ordersQuery, getSingleOrder} = require("./queries/order");
 const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
     fields: () => ({
+        getMe: getMeQuery,
         users: usersQuery,
         categories: categoriesQuery,
         foods: foodsQuery,

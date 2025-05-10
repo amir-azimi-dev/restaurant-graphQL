@@ -2,6 +2,7 @@ const UserModel = require("../../models/user");
 const {validateRegisterUserData, validateLoginUserData} = require("../../utils/validators/user");
 const {hash, compare} = require("../../utils/hash/hash");
 const {generateToken} = require("../../utils/jwt/jwt");
+const {authorizeUser} = require("../../utils/authorizeUser/authorizeUser");
 
 const users = async () => await UserModel.find();
 
@@ -19,7 +20,7 @@ const registerUser = async (_, args) => {
     };
 
     const userData = await UserModel.create(newUserData);
-    const userToken = `Bearer ${generateToken({id: userData._id})}`;
+    const userToken = generateToken({ id: userData._id });
 
     return {
         token: userToken,
@@ -37,7 +38,7 @@ const loginUser = async (_, args) => {
     const isPasswordCorrect = compare(args.password, targetUserData.password);
     if (!isPasswordCorrect) return null;
 
-    const userToken = `Bearer ${generateToken({id: targetUserData._id})}`;
+    const userToken = generateToken({ id: targetUserData._id });
 
     return {
         token: userToken,
@@ -45,8 +46,16 @@ const loginUser = async (_, args) => {
     };
 };
 
+const getMe = async (_, __, req) => {    
+    const user = await authorizeUser(req);
+    if (!user) return null;
+
+    return {...user, password: undefined};
+};
+
 module.exports = {
     users,
     registerUser,
-    loginUser
+    loginUser,
+    getMe
 };

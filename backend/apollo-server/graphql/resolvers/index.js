@@ -1,4 +1,4 @@
-const {users, loginUser, registerUser} = require("./user");
+const {getMe, users, loginUser, registerUser} = require("./user");
 const {categories, createCategory} = require("./category");
 const {foods, singleFood, createFood} = require("./food");
 const {orders, singleOrder, createOrder, changeOrderStatus, removeOrder} = require("./order");
@@ -9,6 +9,7 @@ const UserModel = require("../../models/user");
 
 const resolvers = {
     Query: {
+        getMe,
         users,
         categories,
         foods,
