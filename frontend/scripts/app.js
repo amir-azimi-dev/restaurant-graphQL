@@ -181,20 +181,23 @@ const checkoutOrderHandler = async () => {
         return swal("Please add an order first", "", "info");
     }
 
+    const basketString = basket
+        .map(item => `{ food: "${item.food}", count: ${item.count} }`)
+        .join(",");
+
     const response = await fetch("http://localhost:4000", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access-token")}`
         },
         body: JSON.stringify({
             query: `#graphql
                 mutation {
                     createOrder (
-                        title: ${new Date()},
-                        payload: JSON.parse(${basket})
+                        title: "${(new Date())}",
+                        payload: [${basketString}]
                     ) {
-                        title,
-                        payload,
                         isDelivered
                     }
                 }
@@ -208,7 +211,9 @@ const checkoutOrderHandler = async () => {
         return swal("Error:", errors[0].message, "error");
     }
 
-    swal("Great", "Your Order has been checked out successfully.", "success")
+    swal("Great", "Your Order has been checked out successfully.", "success");
+    localStorage.setItem("basket", JSON.stringify([]));
+    loadFoods();
 };
 
 const loadData = async () => {
