@@ -1,7 +1,7 @@
-const {getMe, users, loginUser, registerUser} = require("./user");
-const {categories, createCategory} = require("./category");
-const {foods, singleFood, createFood} = require("./food");
-const {orders, singleOrder, createOrder, changeOrderStatus, removeOrder} = require("./order");
+const { getMe, users, loginUser, registerUser } = require("./user");
+const { categories, createCategory } = require("./category");
+const { foods, singleFood, createFood } = require("./food");
+const { orders, singleOrder, createOrder, changeOrderStatus, removeOrder } = require("./order");
 
 const FoodModel = require("../../models/food");
 const CategoryModel = require("../../models/category");
@@ -29,7 +29,7 @@ const resolvers = {
     Category: {
         foods: async source => {
             const categoryId = source._id;
-            return FoodModel.find({category: categoryId});
+            return FoodModel.find({ category: categoryId });
         }
     },
     Food: {
@@ -42,15 +42,16 @@ const resolvers = {
     Order: {
         user: async (source) => {
             const userId = source.user;
-            return UserModel.findById(userId, {password: 0});
+            return UserModel.findById(userId, { password: 0 });
         },
 
         payload: async (source) => {
-            return Promise.all(
+            return await Promise.all(
                 source.payload.map(async item => {
                     const targetFood = await FoodModel.findById(item.food).lean();
+
                     return {
-                        ...item,
+                        count: item.count,
                         food: targetFood
                     };
                 })

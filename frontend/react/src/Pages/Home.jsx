@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import { Helmet } from "react-helmet";
 
 const GET_CATEGORIES = gql`
@@ -25,6 +25,23 @@ const GET_FOODS = gql`
   }  
 `;
 
+const CHECKOUT_ORDER = gql`
+  mutation createOrder ($title: String!, $payload: [InputOrderPayload!]!) {
+    createOrder (title: $title, payload: $payload) {
+      payload {
+        food {
+          title
+        },
+        count
+      },
+      user {
+        username,
+        role
+      }
+      isDelivered
+    }
+  }
+`;
 
 export default function Home() {
   const [basket, setBasket] = useState([]);
@@ -32,6 +49,13 @@ export default function Home() {
 
   const { data: categoriesData } = useQuery(GET_CATEGORIES, { variables: {} });
   const { data: foodsData } = useQuery(GET_FOODS);
+  const [checkoutOrder, { error }] = useMutation(CHECKOUT_ORDER, {
+    context: {
+      headers: {
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MWUyNjhkYWE2Yzk2ZWY1MTRjY2ZjMiIsImlhdCI6MTc0NzIyOTg3NCwiZXhwIjoxNzQ3ODM0Njc0fQ.mf3PJXLANb7HbGdZoMAFoUoN56-Sc11Qf129JNpDNOM"
+      }
+    }
+  });
 
   useEffect(() => {
     const localStorageBasket = localStorage.getItem("basket");
@@ -70,6 +94,25 @@ export default function Home() {
     });
   };
 
+  const checkoutHandler = async () => {
+    if (!basket.length) {
+      alert("You haven't Ordered anything yet!");
+    }
+
+    const sanitizedBasket = basket.map(({ food, count }) => ({ food, count }));
+
+    const { data } = await checkoutOrder({
+      variables: {
+        title: `${new Date()}`,
+        payload: sanitizedBasket
+      }
+    });
+
+    console.log(data)
+    alert("Your Order has been checked out successfully.");
+    setBasket([]);
+    localStorage.setItem("basket", JSON.stringify([]));
+  };
 
   return (
     <>
@@ -988,7 +1031,7 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-              <button className="btn btn-warning checkout-btn">
+              <button onClick={checkoutHandler} className="btn btn-warning checkout-btn">
                 Checkout
                 <svg
                   width="18"

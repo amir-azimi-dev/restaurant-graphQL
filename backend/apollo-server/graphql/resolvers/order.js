@@ -1,5 +1,4 @@
 const OrderModel = require("../../models/order");
-const CategoryModel = require("../../models/category");
 const {isValidObjectId} = require("mongoose");
 const {validateCreateOrderData, validateChangeOrderStatusData} = require("../../utils/validators/order");
 const {authorizeUser} = require("../../utils/authorizeUser/authorizeUser");
