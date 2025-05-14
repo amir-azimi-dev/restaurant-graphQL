@@ -1,7 +1,53 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { gql, useQuery } from "@apollo/client";
 import { Helmet } from "react-helmet";
 
+const GET_CATEGORIES = gql`
+  query getCategories {
+    categories {
+      _id,
+      title,
+      icon
+    }
+  }
+`;
+
+const GET_FOODS = gql`
+  query getFoods {
+    foods {
+      _id,
+      title,
+      price,
+      category {
+        title
+      }
+    }
+  }  
+`;
+
+
 export default function Home() {
+  const [basket, setBasket] = useState([]);
+
+  const { data: categoriesData } = useQuery(GET_CATEGORIES, { variables: {} });
+  const { data: foodsData } = useQuery(GET_FOODS);
+
+  useEffect(() => {
+    const localStorageBasket = localStorage.getItem("basket");
+    const basket = localStorageBasket ? JSON.parse(localStorageBasket) : [];
+    setBasket(basket);
+
+  }, []);
+
+  const orderFoodHandler = foodId => {
+    
+  };
+
+  const removeFoodHandler = foodId => {
+    
+  };
+
+
   return (
     <>
       <Helmet>
@@ -725,83 +771,16 @@ export default function Home() {
                     <div className="category-name">All</div>
                   </a>
                 </li>
-                <li className="category-list__item" id="pizza">
-                  <a href="#pizza">
-                    <div className="category-icon">
-                      <i
-                        className="fa-solid fa-pizza-slice"
-                        style={{ color: "#1f1f1f" }}
-                      ></i>
-                    </div>
-                    <div className="category-name">Pizza</div>
-                  </a>
-                </li>
-                <li className="category-list__item" id="asian">
-                  <a href="#asian">
-                    <div className="category-icon">
-                      <i
-                        className="fa-solid fa-bowl-food"
-                        style={{ color: "#1f1f1f" }}
-                      ></i>
-                    </div>
-                    <div className="category-name">Asian</div>
-                  </a>
-                </li>
-                <li className="category-list__item" id="burgers">
-                  <a href="#burgers">
-                    <div className="category-icon">
-                      <i
-                        className="fa-solid fa-burger"
-                        style={{ color: "#1f1f1f" }}
-                      ></i>
-                    </div>
-                    <div className="category-name">Burgers</div>
-                  </a>
-                </li>
-                <li className="category-list__item" id="bbq">
-                  <a href="#bbq">
-                    <div className="category-icon">
-                      <i
-                        className="fa-solid fa-bacon"
-                        style={{ color: "#1f1f1f" }}
-                      ></i>
-                    </div>
-                    <div className="category-name">Barbecue</div>
-                  </a>
-                </li>
-                <li className="category-list__item" id="dessers">
-                  <a href="#dessers">
-                    <div className="category-icon">
-                      <i
-                        className="fa-solid fa-cookie-bite"
-                        style={{ color: "#1f1f1f" }}
-                      ></i>
-                    </div>
-                    <div className="category-name">Dessers</div>
-                  </a>
-                </li>
-                <li className="category-list__item" id="thai">
-                  <a href="#thai">
-                    <div className="category-icon">
-                      <i
-                        className="fa-solid fa-pepper-hot"
-                        style={{ color: "#1f1f1f" }}
-                      ></i>
-                    </div>
-                    <div className="category-name">Thai</div>
-                  </a>
-                </li>
-                <li className="category-list__item" id="sushi">
-                  <a href="#sushi">
-                    <div className="category-icon">
-                      <i
-                        className="fa-solid fa-shrimp"
-                        style={{ color: "#1f1f1f" }}
-                      ></i>
-                    </div>
-                    <div className="category-name">Sushi</div>
-                  </a>
-                </li>
+                {categoriesData?.categories?.map(categoryData => (
+                  <li key={categoryData._id} className="category-list__item" id={categoryData.title}>
+                    <a href={`#${categoryData.title}`}>
+                      <div className="category-icon">
+                        <i className={categoryData.icon} style={{ color: "#1f1f1f" }}></i>
+                      </div>
+                      <div className="category-name">{categoryData.title}</div>
+                    </a>
+                  </li>
+                ))}
               </ul>
               <div className="category-more">
                 <button className="btn btn-secondary category-more-btn">
@@ -826,69 +805,39 @@ export default function Home() {
           </section>
           <section className="section">
             <ul className="restaurant-list">
-              <li className="restaurant-list__item">
-                <a href="#">
-                  <img
-                    className="restaurant-image"
-                    src="https://i.loli.net/2020/04/06/ZOsdvCkE6jDN8Ka.png"
-                  />
-                </a>
-                <div className="restaurant-name">Bagel Story</div>
-                <div className="restaurant-info">
-                  <span className="restaurant-rate">
-                    <i
-                      className="fa-regular fa-star"
-                      style={{ margin: "0 4px 2px" }}
-                    ></i>
-                    4.7
-                  </span>
-                  <span className="restaurant-category">
-                    Deli · Bagels · $$
-                  </span>
-                </div>
-              </li>
-              <li className="restaurant-list__item">
-                <a href="#">
-                  <img
-                    className="restaurant-image"
-                    src="https://i.loli.net/2020/04/06/67ruCzS8WYONoUp.png"
-                  />
-                </a>
-                <div className="restaurant-name">The Estaminet</div>
-                <div className="restaurant-info">
-                  <span className="restaurant-rate">
-                    <i
-                      className="fa-regular fa-star"
-                      style={{ margin: "0 4px 2px" }}
-                    ></i>
-                    4.5
-                  </span>
-                  <span className="restaurant-category">
-                    Cafes · Creperies · $
-                  </span>
-                </div>
-              </li>
-              <li className="restaurant-list__item">
-                <a href="#">
-                  <img
-                    className="restaurant-image"
-                    src="https://i.loli.net/2020/04/06/Hqn6217mSUCbQ8d.png"
-                  />
-                </a>
-                <div className="restaurant-name">Le Paris Dakar</div>
-                <div className="restaurant-info">
-                  <span className="restaurant-rate">
-                    <i
-                      className="fa-regular fa-star"
-                      style={{ margin: "0 4px 2px" }}
-                    ></i>
-                    4.7
-                  </span>
-                  <span className="restaurant-category">
-                    Creperies · Sandwich · $$
-                  </span>
-                </div>
-              </li>
+              {foodsData?.foods?.map(foodData => {
+                const basketFoodData = basket.find(item => item.food === foodData._id);
+                // console.log(basketFoodData);
+
+                return (
+                  <li key={foodData._id} className="restaurant-list__item">
+                    <a href="#">
+                      <img
+                        className="restaurant-image"
+                        src="https://i.loli.net/2020/04/06/ZOsdvCkE6jDN8Ka.png"
+                      />
+                    </a>
+                    <div className="restaurant-name" style={{ display: "flex", alignItems: "center", columnGap: 5 }}>
+                      {foodData.title}
+                      <button onClick={() => orderFoodHandler(foodData._id)}>Order</button>
+                      {basketFoodData && <button onClick={() => removeFoodHandler(foodData._id)}>remove</button>}
+                      {basketFoodData && <span>{basketFoodData.count}x</span>}
+                    </div>
+                    <div className="restaurant-info">
+                      <span className="restaurant-rate">
+                        <i
+                          className="fa-regular fa-star"
+                          style={{ margin: "0 4px 2px" }}
+                        ></i>
+                        4.7
+                      </span>
+                      <span className="restaurant-category">
+                        {foodData.category.title} · {foodData.price} Toman
+                      </span>
+                    </div>
+                  </li>
+                )
+              })}
             </ul>
           </section>
         </section>
