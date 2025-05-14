@@ -28,6 +28,7 @@ const GET_FOODS = gql`
 
 export default function Home() {
   const [basket, setBasket] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const { data: categoriesData } = useQuery(GET_CATEGORIES, { variables: {} });
   const { data: foodsData } = useQuery(GET_FOODS);
@@ -39,15 +40,23 @@ export default function Home() {
 
   }, []);
 
-  const orderFoodHandler = foodId => {
+  useEffect(() => {
+    let totalPrice = 0;
+    basket.forEach(item => totalPrice += item.price * item.count);
+    setTotalPrice(totalPrice.toLocaleString());
+
+  }, [basket]);
+
+  const orderFoodHandler = ({ _id: foodId, title: foodTitle, price }) => {
     setBasket(prevBasket => {
       let newBasket = [...prevBasket];
       const targetFoodIndex = newBasket.findIndex(item => item.food === foodId);
       if (targetFoodIndex !== -1) {
         newBasket[targetFoodIndex].count += 1;
+      } else {
+        newBasket = [...newBasket, { food: foodId, count: 1, title: foodTitle, price }];
       }
 
-      newBasket = [...newBasket, { food: foodId, count: 1 }];
       localStorage.setItem("basket", JSON.stringify(newBasket));
       return newBasket;
     });
@@ -821,7 +830,6 @@ export default function Home() {
             <ul className="restaurant-list">
               {foodsData?.foods?.map(foodData => {
                 const basketFoodData = basket.find(item => item.food === foodData._id);
-                // console.log(basketFoodData);
 
                 return (
                   <li key={foodData._id} className="restaurant-list__item">
@@ -833,7 +841,7 @@ export default function Home() {
                     </a>
                     <div className="restaurant-name" style={{ display: "flex", alignItems: "center", columnGap: 5 }}>
                       {foodData.title}
-                      <button onClick={() => orderFoodHandler(foodData._id)}>Order</button>
+                      <button onClick={() => orderFoodHandler(foodData)}>Order</button>
                       {basketFoodData && <button onClick={() => removeFoodHandler(foodData._id)}>remove</button>}
                       {basketFoodData && <span>{basketFoodData.count}x</span>}
                     </div>
@@ -900,45 +908,36 @@ export default function Home() {
               </div>
             </div>
             <ul className="food-list">
-              <li className="food-list__item">
-                <img
-                  className="food-image"
-                  src="https://i.loli.net/2020/04/06/7oZgORNCnGE5qhU.png"
-                />
-                <div className="food-buy-amount">1 x</div>
-                <div className="food-name">Beach BBQBurger</div>
-                <div className="food-price">$14.99</div>
-              </li>
-              <li className="food-list__item">
-                <img
-                  className="food-image"
-                  src="https://i.loli.net/2020/04/06/EZJyVICMS6GYueL.png"
-                />
-                <div className="food-buy-amount">1 x</div>
-                <div className="food-name">French Fries</div>
-                <div className="food-price">$9.99</div>
-              </li>
-              <li className="food-list__item">
-                <img
-                  className="food-image"
-                  src="https://i.loli.net/2020/04/06/pIWNyMlqCSZiLtr.png"
-                />
-                <div className="food-buy-amount">1 x</div>
-                <div className="food-name">Cheese Sauce</div>
-                <div className="food-price">$0.99</div>
-              </li>
-              <li className="food-list__item">
-                <img
-                  className="food-image"
-                  src="https://i.loli.net/2020/04/06/BN2JIuHAC6Gh3eR.png"
-                />
-                <div className="food-name">Delivery</div>
-                <div className="food-price">$0.00</div>
-              </li>
+              {basket?.map(item => (
+                <li key={item.food} className="food-list__item">
+                  <img
+                    className="food-image"
+                    src="https://i.loli.net/2020/04/06/ZOsdvCkE6jDN8Ka.png"
+                  />
+                  <div className="food-buy-amount">{item.count} x</div>
+                  <div className="food-name">{item.title}</div>
+                  <div className="food-price">${(item.count * item.price).toLocaleString()}</div>
+                </li>
+              ))}
+
+              {basket.length ? (
+                <li className="food-list__item">
+                  <img
+                    className="food-image"
+                    src="https://i.loli.net/2020/04/06/BN2JIuHAC6Gh3eR.png"
+                  />
+                  <div className="food-name">Delivery</div>
+                  <div className="food-price">$0.00</div>
+                </li>
+              ) : (
+                <div>
+                  You haven't Ordered anything yet ...
+                </div>
+              )}
             </ul>
             <div className="total-price">
               <div className="total">Total:</div>
-              <div className="price">$25.97</div>
+              <div className="price">{totalPrice} Toman</div>
             </div>
             <div className="buy-action">
               <div className="person-number-input">
