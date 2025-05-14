@@ -40,11 +40,25 @@ export default function Home() {
   }, []);
 
   const orderFoodHandler = foodId => {
-    
+    setBasket(prevBasket => {
+      let newBasket = [...prevBasket];
+      const targetFoodIndex = newBasket.findIndex(item => item.food === foodId);
+      if (targetFoodIndex !== -1) {
+        newBasket[targetFoodIndex].count += 1;
+      }
+
+      newBasket = [...newBasket, { food: foodId, count: 1 }];
+      localStorage.setItem("basket", JSON.stringify(newBasket));
+      return newBasket;
+    });
   };
 
   const removeFoodHandler = foodId => {
-    
+    setBasket(prevBasket => {
+      const newBasket = prevBasket.filter(item => item.food !== foodId);
+      localStorage.setItem("basket", JSON.stringify(newBasket));
+      return newBasket;
+    });
   };
 
 
