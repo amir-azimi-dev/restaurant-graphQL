@@ -1,8 +1,21 @@
-import React from 'react'
+import { gql, useQuery } from "@apollo/client"
+
+const GET_USERS = gql`
+  query {
+    users {
+      _id,
+      username,
+      email,
+      role
+    }
+  }
+`;
 
 const Users = () => {
+  const { data } = useQuery(GET_USERS);
+
   return (
-<section className="dashboard">
+    <section className="dashboard">
       <div className="top">
         <i className="uil uil-bars sidebar-toggle"></i>
 
@@ -14,7 +27,7 @@ const Users = () => {
         <img src="images/profile.jpg" alt="" />
       </div>
 
-      <div className="dash-content" style={{width: "100%"}}>
+      <div className="dash-content" style={{ width: "100%" }}>
         <div className="overview">
           <div className="title">
             <i className="uil uil-tachometer-fast-alt"></i>
@@ -42,38 +55,28 @@ const Users = () => {
               </div>
             </header>
             <main>
-              <div className="table-row">
-                <p className="id">#1</p>
-                <p>rad_front</p>
-                <p>ce01010101@gmail.com</p>
-                <div className="flex center">
-                  <p className="green-status">ADMIN</p>
+              {data?.users?.map((user, index) => (
+                <div key={user._id} className="table-row">
+                  <p className="id">#{index + 1}</p>
+                  <p>{user.username}</p>
+                  <p>{user.email}</p>
+                  <div className="flex center">
+                    {user.role === "ADMIN" ? (
+                      <p className="green-status">ADMIN</p>
+                    ) : (
+                      <p className="yellow-status">USER</p>
+                    )}
+                  </div>
+                  <div className="flex center">
+                    <button className="ui-button error">
+                      <i className="fa-solid fa-trash-can"></i>
+                    </button>
+                    <button className="ui-button primary">
+                      <i className="fa-solid fa-pen-to-square"></i>
+                    </button>
+                  </div>
                 </div>
-                <div className="flex center">
-                  <button className="ui-button error">
-                    <i className="fa-solid fa-trash-can"></i>
-                  </button>
-                  <button className="ui-button primary">
-                    <i className="fa-solid fa-pen-to-square"></i>
-                  </button>
-                </div>
-              </div>
-              <div className="table-row">
-                <p className="id">#1</p>
-                <p>peyman2dev</p>
-                <p>peyman2dev@gmail.com</p>
-                <div className="flex center">
-                  <p className="yellow-status">USER</p>
-                </div>
-                <div className="flex center">
-                  <button className="ui-button error">
-                    <i className="fa-solid fa-trash-can"></i>
-                  </button>
-                  <button className="ui-button primary">
-                    <i className="fa-solid fa-pen-to-square"></i>
-                  </button>
-                </div>
-              </div>
+              ))}
             </main>
             <footer className="flex end">
               <div className="pagination flex">

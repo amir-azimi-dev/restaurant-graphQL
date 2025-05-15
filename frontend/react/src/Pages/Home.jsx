@@ -47,7 +47,7 @@ export default function Home() {
   const [basket, setBasket] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const { data: categoriesData } = useQuery(GET_CATEGORIES, { variables: {} });
+  const { data: categoriesData, refetch } = useQuery(GET_CATEGORIES, { variables: {} });
   const { data: foodsData } = useQuery(GET_FOODS);
   const [checkoutOrder, { error }] = useMutation(CHECKOUT_ORDER, {
     context: {
